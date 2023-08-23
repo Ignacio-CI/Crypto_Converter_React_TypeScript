@@ -42,13 +42,21 @@ const Heading = styled.h1`
 `;
 
 function App(): JSX.Element {
-  const [currencies, setCurrencies] = useState<Currencies>({});
+  const [currencies, setCurrencies] = useState<Currencies>({currency: '', cryptoCurrency: ''});
+  const [result, setResult] = useState<object>({})
 
   useEffect(() => {
-    if(Object.keys(currencies).length > 0) {
+    const { currency, cryptoCurrency } = currencies;
+
+    if(![currency, cryptoCurrency].includes('')) {
       const qouteCurrency = async () => {
-        const { currency, cryptoCurrency } = currencies;
         const url = `https://min-api.cryptocompare.com/data/pricemultifull?fsyms=${currency}&tsyms=${cryptoCurrency}`;
+        const response = await fetch(url);
+        const data = await response.json();
+
+        const currencyPairResult: object = (data.DISPLAY[currency][cryptoCurrency]);
+        
+        setResult(currencyPairResult);
       }
       
       qouteCurrency()

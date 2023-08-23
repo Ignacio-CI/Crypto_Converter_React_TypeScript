@@ -22,7 +22,7 @@ const useSelectCurrency = (label: string, options: Currency[]) => {
 
     const [state, setState] = useState<string>('');
 
-    const SelectCurrency = (): string | JSX.Element => (
+    const SelectCurrency = (): JSX.Element => (
        <>
         <Label>{label}</Label>
         <Select

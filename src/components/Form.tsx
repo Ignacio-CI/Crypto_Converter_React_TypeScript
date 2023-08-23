@@ -60,7 +60,6 @@ const Form = ({ setCurrencies }: FormProps): JSX.Element => {
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      console.log(currency, cryptoCurrency)
 
       if([currency, cryptoCurrency].includes('')) {
         setError(true);
@@ -69,8 +68,8 @@ const Form = ({ setCurrencies }: FormProps): JSX.Element => {
 
       setError(false);
       setCurrencies({
-        currency,
-        cryptoCurrency     
+        currency: currency as string,
+        cryptoCurrency: cryptoCurrency as string    
       });
       
     }
@@ -90,7 +89,7 @@ const Form = ({ setCurrencies }: FormProps): JSX.Element => {
             type="submit" 
             value="Convert"
         />
-    </form>
+        </form>
     </>
     
   )
