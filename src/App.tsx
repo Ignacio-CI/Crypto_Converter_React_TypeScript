@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react'
 import styled from '@emotion/styled';
 import CryptoImage from './img/imagen-criptos.png';
 import Form from './components/Form';
+import Result from './components/Result'
+import Spinner from './components/Spinner'
 import { Currencies } from './types/types'
 
 const Container = styled.div`
@@ -43,20 +45,30 @@ const Heading = styled.h1`
 
 function App(): JSX.Element {
   const [currencies, setCurrencies] = useState<Currencies>({currency: '', cryptoCurrency: ''});
-  const [result, setResult] = useState<object>({})
+  const [result, setResult] = useState<object>({});
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const { currency, cryptoCurrency } = currencies;
 
     if(![currency, cryptoCurrency].includes('')) {
       const qouteCurrency = async () => {
+        setLoading(true);
+        setResult({});
+
         const url = `https://min-api.cryptocompare.com/data/pricemultifull?fsyms=${currency}&tsyms=${cryptoCurrency}`;
         const response = await fetch(url);
         const data = await response.json();
+        console.log(data);
+        
 
         const currencyPairResult: object = (data.DISPLAY[currency][cryptoCurrency]);
         
         setResult(currencyPairResult);
+        console.log(currencyPairResult);
+
+        setLoading(false);
+        
       }
       
       qouteCurrency()
@@ -76,6 +88,9 @@ function App(): JSX.Element {
           <Form 
             setCurrencies={setCurrencies}
           />
+          {loading && <Spinner />}
+          {result.PRICE && <Result result={result} />}
+          
         </div>
       </Container>
     </>
